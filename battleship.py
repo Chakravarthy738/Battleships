@@ -29,12 +29,11 @@ def makeModel(data):
     data["cols"]=10
     data["boardsize"]=500
     data["cellsize"]=5
-    data["userboard"]=emptyGrid(data["rows"],data["cols"])
+    data["userboard"]=test.testGrid()
     data["computerboard"]=emptyGrid(data["rows"],data["cols"])
     addShips(data["computerboard"],4)
     data["numberofShips"]=5
-    data["userboard"]=createShip()
-    data["computerboard"]=createShip()
+
     return data
 
 
@@ -133,7 +132,16 @@ Parameters: dict mapping strs to values ; Tkinter canvas ; 2D list of ints ; boo
 Returns: None
 '''
 def drawGrid(data, canvas, grid, showShips):
-    return
+    for row in range(data["rows"]):
+         for cols in range(data["columns"]):
+             if grid[row][cols]==SHIP_UNCLICKED:
+                 if showShips == True
+                 canvas.create_rectangle(cols*data["cellsize"],row*data["cellsize"],data["cellsize"]+cols*data["cellsize"], row*data["cellsize"]+data["cellsize"], fill="yellow")
+                
+             else:
+                 canvas.create_rectangle(cols*data["cellsize"],row*data["cellsize"],data["cellsize"]+cols*data["cellsize"], row*data["cellsize"]+data["cellsize"], fill="blue")
+      
+    return 
 
 
 ### WEEK 2 ###
