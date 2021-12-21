@@ -168,10 +168,12 @@ Parameters: 2D list of ints
 Returns: bool
 '''
 def isHorizontal(ship):
-    #col=0
-    #if ship[1][col]
-    return
-
+    col=0
+    if ship[col][0]==ship[col+1][0]==ship[col+2][0]:
+        ship.sort()
+        if ship[col+1][1]-ship[col][1]==1 and ship[col+2][1]-ship[col+1][1]==1:
+            return True
+    return False
 
 '''
 getClickedCell(data, event)
@@ -320,7 +322,8 @@ def runSimulation(w, h):
 
 # This code runs the test cases to check your work
 if __name__ == "__main__":
-    test.testGrid()
-
+    test.testIsHorizontal()
+    
+    
     ## Finally, run the simulation to test it manually ##
-    runSimulation(500, 500)
+    # runSimulation(500, 500)
