@@ -28,12 +28,12 @@ def makeModel(data):
     data["rows"]=10
     data["cols"]=10
     data["boardsize"]=500
-    data["cellsize"]=5
+    data["cellsize"]=data["boardsize"]/data["rows"]
     data["userboard"]=test.testGrid()
     data["computerboard"]=emptyGrid(data["rows"],data["cols"])
-    addShips(data["computerboard"],4)
     data["numberofShips"]=5
-
+    data["computerboard"]=addShips(data["computerboard"],data["numberofShips"])
+    
     return data
 
 
@@ -44,7 +44,7 @@ Returns: None
 '''
 def makeView(data, userCanvas, compCanvas):
     drawGrid(data,userCanvas,data["userboard"],True)
-    drawGrid(data,userCanvas,data["computerboard"],False)
+    drawGrid(data,compCanvas,data["computerboard"],True)
     return
 
 
@@ -135,15 +135,15 @@ Returns: None
 '''
 def drawGrid(data, canvas, grid, showShips):
     for row in range(data["rows"]):
-         for cols in range(data["columns"]):
+         for cols in range(data["cols"]):
              if grid[row][cols]==SHIP_UNCLICKED:
-                 if showShips == True:
+                 if showShips:
                      canvas.create_rectangle(cols*data["cellsize"],row*data["cellsize"],data["cellsize"]+cols*data["cellsize"], row*data["cellsize"]+data["cellsize"], fill="yellow")
                  else:
                      canvas.create_rectangle(cols*data["cellsize"],row*data["cellsize"],data["cellsize"]+cols*data["cellsize"], row*data["cellsize"]+data["cellsize"], fill="blue")
              else:
                  canvas.create_rectangle(cols*data["cellsize"],row*data["cellsize"],data["cellsize"]+cols*data["cellsize"], row*data["cellsize"]+data["cellsize"], fill="blue")
-    return 
+     
 
 
 ### WEEK 2 ###
@@ -316,4 +316,4 @@ if __name__ == "__main__":
     test.testGrid()
 
     ## Finally, run the simulation to test it manually ##
-    # runSimulation(500, 500)
+    runSimulation(500, 500)
