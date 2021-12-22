@@ -145,7 +145,6 @@ def drawGrid(data, canvas, grid, showShips):
              else:
                  canvas.create_rectangle(cols*data["cellsize"],row*data["cellsize"],data["cellsize"]+cols*data["cellsize"], row*data["cellsize"]+data["cellsize"], fill="blue")
      
-     
 
 
 ### WEEK 2 ###
