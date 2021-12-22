@@ -28,12 +28,12 @@ def makeModel(data):
     data["rows"]=10
     data["cols"]=10
     data["boardsize"]=500
-    data["cellsize"]=50
+    data["cellsize"]=data["boardsize"]/data["rows"]
     data["userboard"]=test.testGrid()
     data["computerboard"]=emptyGrid(data["rows"],data["cols"])
-    data["computerboard"]=addShips(data["computerboard"],5)
     data["numberofShips"]=5
-
+    data["computerboard"]=addShips(data["computerboard"],data["numberofShips"])
+    
     return data
 
 
@@ -143,7 +143,7 @@ def drawGrid(data, canvas, grid, showShips):
                      canvas.create_rectangle(cols*data["cellsize"],row*data["cellsize"],data["cellsize"]+cols*data["cellsize"], row*data["cellsize"]+data["cellsize"], fill="blue")
              else:
                  canvas.create_rectangle(cols*data["cellsize"],row*data["cellsize"],data["cellsize"]+cols*data["cellsize"], row*data["cellsize"]+data["cellsize"], fill="blue")
-    return 
+     
 
 
 ### WEEK 2 ###
@@ -326,4 +326,4 @@ if __name__ == "__main__":
     
     
     ## Finally, run the simulation to test it manually ##
-    # runSimulation(500, 500)
+    runSimulation(500, 500)
