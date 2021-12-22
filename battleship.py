@@ -196,11 +196,10 @@ Returns: None
 '''
 def drawShip(data, canvas, ship):
     for i in ship:
-        # [3, 4], [3, 5], [3, 6]
         row=i[0]
         cols=i[1]
         canvas.create_rectangle(cols*data["cellsize"],row*data["cellsize"],data["cellsize"]+cols*data["cellsize"], row*data["cellsize"]+data["cellsize"], fill="white")
-        
+
 
 
 '''
@@ -210,6 +209,7 @@ Returns: bool
 '''
 def shipIsValid(grid, ship):
     return
+    
 
 
 '''
