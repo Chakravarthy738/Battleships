@@ -28,11 +28,13 @@ def makeModel(data):
     data["rows"]=10
     data["cols"]=10
     data["boardsize"]=500
-    data["cellsize"]=50
-    data["userboard"]=test.testGrid()
+    data["cellsize"]=data["boardsize"]/data["rows"]
+    data["userboard"]=emptyGrid(data["rows"],data["cols"])
     data["computerboard"]=emptyGrid(data["rows"],data["cols"])
-    data["computerboard"]=addShips(data["computerboard"],5)
     data["numberofShips"]=5
+    data["computerboard"]=addShips(data["computerboard"],data["numberofShips"])
+    data["temporaryShips"]=test.testShip()
+    
 
     return data
 
@@ -45,6 +47,8 @@ Returns: None
 def makeView(data, userCanvas, compCanvas):
     drawGrid(data,userCanvas,data["userboard"],True)
     drawGrid(data,compCanvas,data["computerboard"],True)
+    drawShip(data,userCanvas,data["temporaryShips"])
+    
     return
 
 
@@ -168,10 +172,12 @@ Parameters: 2D list of ints
 Returns: bool
 '''
 def isHorizontal(ship):
-    #col=0
-    #if ship[1][col]
-    return
-
+    col=0
+    if ship[col][0]==ship[col+1][0]==ship[col+2][0]:
+        ship.sort()
+        if ship[col+1][1]-ship[col][1]==1 and ship[col+2][1]-ship[col+1][1]==1:
+            return True
+    return False
 
 '''
 getClickedCell(data, event)
@@ -179,7 +185,8 @@ Parameters: dict mapping strs to values ; mouse event object
 Returns: list of ints
 '''
 def getClickedCell(data, event):
-    return
+    a=data["cellsize"]
+    return [int(event.y/a),int(event.x/a)]
 
 
 '''
@@ -188,7 +195,11 @@ Parameters: dict mapping strs to values ; Tkinter canvas; 2D list of ints
 Returns: None
 '''
 def drawShip(data, canvas, ship):
-    return
+    for i in ship:
+        row=i[0]
+        cols=i[1]
+        canvas.create_rectangle(cols*data["cellsize"],row*data["cellsize"],data["cellsize"]+cols*data["cellsize"], row*data["cellsize"]+data["cellsize"], fill="white")
+
 
 
 '''
@@ -197,7 +208,11 @@ Parameters: 2D list of ints ; 2D list of ints
 Returns: bool
 '''
 def shipIsValid(grid, ship):
-    return
+    if checkShip(grid,ship):
+        if (isVertical(ship)==True or isHorizontal(ship)==True):
+            return True
+    return False
+    
 
 
 '''
@@ -320,7 +335,8 @@ def runSimulation(w, h):
 
 # This code runs the test cases to check your work
 if __name__ == "__main__":
-    test.testGrid()
-
+    test.testShipIsValid()
+    
+    
     ## Finally, run the simulation to test it manually ##
     runSimulation(500, 500)
