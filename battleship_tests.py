@@ -115,20 +115,20 @@ def week1Tests():
 def testIsVertical():
     print("Testing isVertical()...", end="")
     assert(isVertical([ [0, 1], [1, 1], [2, 1] ]) == True)
-    assert(isVertical([ [2, 1], [0, 1], [1, 1] ]) == True) # order doesn't matter
+    assert(isVertical([ [2, 1], [0, 1], [1, 1] ]) == True) # order doesn't matter#[0,1][1,1][2,1]
     assert(isVertical([ [1, 0], [1, 1], [1, 2] ]) == False)
     assert(isVertical([ [0, 0], [1, 0], [3, 0] ]) == False) # must be sequential
-    assert(isVertical([ [1, 0], [3, 2], [0, 1] ]) == False)
+    assert(isVertical([ [1, 0], [3, 2], [0, 1] ]) == False)#[0,1][1,0][3,2]
     assert(isVertical([ [4, 5], [5, 5], [6, 5] ]) == True)
     print("... done!")
 
 def testIsHorizontal():
     print("Testing isHorizontal()...", end="")
     assert(isHorizontal([ [1, 0], [1, 1], [1, 2] ]) == True)
-    assert(isHorizontal([ [1, 2], [1, 0], [1, 1] ]) == True) # order doesn't matter
+    assert(isHorizontal([ [1, 2], [1, 0], [1, 1] ]) == True) # order doesn't matter#[1,0][1,1][1,2]
     assert(isHorizontal([ [0, 1], [1, 1], [2, 1] ]) == False)
     assert(isHorizontal([ [0, 0], [0, 1], [0, 3] ]) == False) # must be sequential
-    assert(isHorizontal([ [0, 1], [2, 3], [1, 0] ]) == False)
+    assert(isHorizontal([ [0, 1], [2, 3], [1, 0] ]) == False)#[0,1][1,0][2,3]
     assert(isHorizontal([ [5, 4], [5, 5], [5, 6] ]) == True)
     print("... done!")
 
