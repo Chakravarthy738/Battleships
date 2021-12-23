@@ -238,9 +238,14 @@ Parameters: dict mapping strs to values ; int ; int
 Returns: None
 '''
 def clickUserBoard(data, row, col):
-    
-    
-    return
+    b=data["userboard"]
+    if [row,col] in b or data["userships"]==5:
+        return
+    data["temporaryShip"].append([row,col])
+    if len(data["temporaryShip"])==3:
+        placeShip(data)
+    if data["userships"]==5:
+        print("You can start the game")
 
 
 ### WEEK 3 ###
