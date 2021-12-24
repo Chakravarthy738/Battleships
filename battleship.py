@@ -28,11 +28,14 @@ def makeModel(data):
     data["rows"]=10
     data["cols"]=10
     data["boardsize"]=500
-    data["cellsize"]=50
-    data["userboard"]=test.testGrid()
+    data["cellsize"]=data["boardsize"]/data["rows"]
+    data["userboard"]=emptyGrid(data["rows"],data["cols"])
     data["computerboard"]=emptyGrid(data["rows"],data["cols"])
-    data["computerboard"]=addShips(data["computerboard"],5)
     data["numberofShips"]=5
+    data["computerboard"]=addShips(data["computerboard"],data["numberofShips"])
+    data["temporaryShips"]=[]
+    data["userships"]=0
+    
 
     return data
 
@@ -44,7 +47,9 @@ Returns: None
 '''
 def makeView(data, userCanvas, compCanvas):
     drawGrid(data,userCanvas,data["userboard"],True)
-    drawGrid(data,compCanvas,data["computerboard"],True)
+    drawGrid(data,compCanvas,data["computerboard"],False)
+    drawShip(data,userCanvas,data["temporaryShips"])
+    
     return
 
 
@@ -63,6 +68,12 @@ Parameters: dict mapping strs to values ; mouse event object ; 2D list of ints
 Returns: None
 '''
 def mousePressed(data, event, board):
+    row,col=getClickedCell(data, event)
+    if board=="user":
+        clickUserBoard(data, row, col)
+    if board=="comp":
+        runGameTurn(data, row, col)
+    
     pass
 
 #### WEEK 1 ####
@@ -137,10 +148,14 @@ def drawGrid(data, canvas, grid, showShips):
     for row in range(data["rows"]):
          for cols in range(data["cols"]):
              if grid[row][cols]==SHIP_UNCLICKED:
-                 if showShips: 
+                 if showShips:
                      canvas.create_rectangle(cols*data["cellsize"],row*data["cellsize"],data["cellsize"]+cols*data["cellsize"], row*data["cellsize"]+data["cellsize"], fill="yellow")
                  else:
                      canvas.create_rectangle(cols*data["cellsize"],row*data["cellsize"],data["cellsize"]+cols*data["cellsize"], row*data["cellsize"]+data["cellsize"], fill="blue")
+             elif grid[row][cols]==SHIP_CLICKED:
+                 canvas.create_rectangle(cols*data["cellsize"],row*data["cellsize"],data["cellsize"]+cols*data["cellsize"], row*data["cellsize"]+data["cellsize"], fill="red")
+             elif grid[row][cols]==EMPTY_CLICKED:
+                 canvas.create_rectangle(cols*data["cellsize"],row*data["cellsize"],data["cellsize"]+cols*data["cellsize"], row*data["cellsize"]+data["cellsize"], fill="white")
              else:
                  canvas.create_rectangle(cols*data["cellsize"],row*data["cellsize"],data["cellsize"]+cols*data["cellsize"], row*data["cellsize"]+data["cellsize"], fill="blue")
     return 
@@ -168,10 +183,12 @@ Parameters: 2D list of ints
 Returns: bool
 '''
 def isHorizontal(ship):
-    #col=0
-    #if ship[1][col]
-    return
-
+    col=0
+    if ship[col][0]==ship[col+1][0]==ship[col+2][0]:
+        ship.sort()
+        if ship[col+1][1]-ship[col][1]==1 and ship[col+2][1]-ship[col+1][1]==1:
+            return True
+    return False
 
 '''
 getClickedCell(data, event)
@@ -179,7 +196,8 @@ Parameters: dict mapping strs to values ; mouse event object
 Returns: list of ints
 '''
 def getClickedCell(data, event):
-    return
+    a=data["cellsize"]
+    return [int(event.y/a),int(event.x/a)]
 
 
 '''
@@ -188,7 +206,11 @@ Parameters: dict mapping strs to values ; Tkinter canvas; 2D list of ints
 Returns: None
 '''
 def drawShip(data, canvas, ship):
-    return
+    for i in ship:
+        row=i[0]
+        cols=i[1]
+        canvas.create_rectangle(cols*data["cellsize"],row*data["cellsize"],data["cellsize"]+cols*data["cellsize"], row*data["cellsize"]+data["cellsize"], fill="white")
+
 
 
 '''
@@ -197,7 +219,11 @@ Parameters: 2D list of ints ; 2D list of ints
 Returns: bool
 '''
 def shipIsValid(grid, ship):
-    return
+    if checkShip(grid, ship):
+        if (isVertical(ship)==True or isHorizontal(ship)==True):
+            return True
+    return False
+    
 
 
 '''
@@ -206,6 +232,14 @@ Parameters: dict mapping strs to values
 Returns: None
 '''
 def placeShip(data):
+    a=data["userboard"]
+    if shipIsValid(a, data["temporaryShips"]):
+        for i in data["temporaryShips"]:
+            a[i[0]][i[1]]=SHIP_UNCLICKED
+        data["userships"]=data["userships"]+1
+    else:
+        print("Ship is not Valid")
+    data["temporaryships"]=[]
     return
 
 
@@ -215,7 +249,17 @@ Parameters: dict mapping strs to values ; int ; int
 Returns: None
 '''
 def clickUserBoard(data, row, col):
+    b=data["userboard"]
+    if [row,col] in b or data["userships"]==5:
+        return
+    data["temporaryShips"].append([row,col])
+    if len(data["temporaryShips"])==3:
+        placeShip(data)
+        data["temporaryShips"]=[]
+    if data["userships"]==5:
+        print("You can start the game")
     return
+
 
 
 ### WEEK 3 ###
@@ -226,6 +270,12 @@ Parameters: dict mapping strs to values ; 2D list of ints ; int ; int ; str
 Returns: None
 '''
 def updateBoard(data, board, row, col, player):
+    if board[row,col]==SHIP_UNCLICKED:
+        board[row,col]=SHIP_CLICKED
+    else:
+        board[row,col]=EMPTY_UNCLICKED
+        board[row,col]=EMPTY_CLICKED
+
     return
 
 
@@ -235,6 +285,11 @@ Parameters: dict mapping strs to values ; int ; int
 Returns: None
 '''
 def runGameTurn(data, row, col):
+    z=data["computerboard"]
+    if z[row,col]==SHIP_CLICKED or z[row,col]==EMPTY_CLICKED:
+        return
+    else:
+        updateBoard(data, z, row, col, "user")
     return
 
 
@@ -244,7 +299,14 @@ Parameters: 2D list of ints
 Returns: list of ints
 '''
 def getComputerGuess(board):
-    return
+    randomrowvalue = random.randint(0,9)
+    randomcolvalue = random.randint(0,9)
+    while (board[randomrowvalue][randomcolvalue]== SHIP_CLICKED) or (board[randomrowvalue][randomcolvalue]== EMPTY_CLICKED):
+        randomrowvalue = random.randint(0,9)
+        randomcolvalue = random.randint(0,9)
+    return [randomrowvalue,randomcolvalue]
+
+  
 
 
 '''
@@ -320,7 +382,8 @@ def runSimulation(w, h):
 
 # This code runs the test cases to check your work
 if __name__ == "__main__":
-    test.testGrid()
-
+    test.testGetComputerGuess()
+    
+    
     ## Finally, run the simulation to test it manually ##
     runSimulation(500, 500)
