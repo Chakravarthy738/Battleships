@@ -273,7 +273,7 @@ def updateBoard(data, board, row, col, player):
     if board[row,col]==SHIP_UNCLICKED:
         board[row,col]=SHIP_CLICKED
     else:
-        board[row,col]==EMPTY_UNCLICKED
+        board[row,col]=EMPTY_UNCLICKED
         board[row,col]=EMPTY_CLICKED
 
     return
@@ -299,7 +299,14 @@ Parameters: 2D list of ints
 Returns: list of ints
 '''
 def getComputerGuess(board):
-    return
+    randomrowvalue = random.randint(0,9)
+    randomcolvalue = random.randint(0,9)
+    while (board[randomrowvalue][randomcolvalue]== SHIP_CLICKED) or (board[randomrowvalue][randomcolvalue]== EMPTY_CLICKED):
+        randomrowvalue = random.randint(0,9)
+        randomcolvalue = random.randint(0,9)
+    return [randomrowvalue,randomcolvalue]
+
+  
 
 
 '''
@@ -375,7 +382,7 @@ def runSimulation(w, h):
 
 # This code runs the test cases to check your work
 if __name__ == "__main__":
-    
+    test.testGetComputerGuess()
     
     
     ## Finally, run the simulation to test it manually ##
