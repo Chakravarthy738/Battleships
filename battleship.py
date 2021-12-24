@@ -244,8 +244,10 @@ def clickUserBoard(data, row, col):
     data["temporaryShip"].append([row,col])
     if len(data["temporaryShip"])==3:
         placeShip(data)
+        data["temporaryships"]=[]
     if data["userships"]==5:
         print("You can start the game")
+    return
 
 
 ### WEEK 3 ###
