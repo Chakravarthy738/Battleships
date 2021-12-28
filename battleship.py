@@ -52,6 +52,7 @@ def makeView(data, userCanvas, compCanvas):
     drawGrid(data,userCanvas,data["userboard"],True)
     drawGrid(data,compCanvas,data["computerboard"],False)
     drawShip(data,userCanvas,data["temporaryShips"])
+    drawGameOver(data, user)
     
     return
 
@@ -345,12 +346,12 @@ def drawGameOver(data, canvas):
     if (data["winner"]=="user"):
         canvas.create_text(250,150, text="CONGRACTULATIONS", fill="gold",font=("Arial","24","bold italic"))
         canvas.create_text(250,250, text="PRESS ENTER IF U WANT TO PLAY AGAIN", fill="black",font=("Arial","16","bold italic"))
-    if (data["winner"]=="comp"):
+    elif (data["winner"]=="comp"):
         canvas.create_text(250,150, text="YOU LOSE", fill="brown",font=("Arial","24","bold italic"))
         canvas.create_text(250,250, text="PRESS ENTER IF U WANT TO PLAY AGAIN", fill="black",font=("Arial","16","bold italic"))
-    if (data["winner"]=="draw"):
+    elif (data["winner"]=="draw"):
         canvas.create_text(250,150, text="OUT OF MOVES", fill="silver",font=("Arial","24","bold italic"))
-        canvas.create_text(250,250, text="PRESS ENTER IF U WANT TO PLAY AGAIN", fill="black",font=("Arial","16", "bold italic"))
+        canvas.create_text(250,250, text="PRESS ENTER IF U WANT TO PLAY AGAIN", fill="black",font=("Arial","16","bold italic"))
 
         canvas.pack()
 
