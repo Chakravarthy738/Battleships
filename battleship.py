@@ -52,6 +52,7 @@ def makeView(data, userCanvas, compCanvas):
     drawGrid(data,userCanvas,data["userboard"],True)
     drawGrid(data,compCanvas,data["computerboard"],False)
     drawShip(data,userCanvas,data["temporaryShips"])
+    drawGameOver(data, userCanvas)
     
     return
 
