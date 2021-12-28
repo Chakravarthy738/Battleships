@@ -35,6 +35,9 @@ def makeModel(data):
     data["computerboard"]=addShips(data["computerboard"],data["numberofShips"])
     data["temporaryShips"]=[]
     data["userships"]=0
+    data["winner"]=None
+    data["currentturns"]=0
+    data["maxturns"]=50
     
 
     return data
@@ -59,7 +62,8 @@ Parameters: dict mapping strs to values ; key event object
 Returns: None
 '''
 def keyPressed(data, event):
-    pass
+    return
+       
 
 
 '''
@@ -68,13 +72,14 @@ Parameters: dict mapping strs to values ; mouse event object ; 2D list of ints
 Returns: None
 '''
 def mousePressed(data, event, board):
+    if data["winner"]!=None:
+        return None
     row,col=getClickedCell(data, event)
     if board=="user":
         clickUserBoard(data, row, col)
     if board=="comp":
         runGameTurn(data, row, col)
-    
-    pass
+  
 
 #### WEEK 1 ####
 
@@ -270,11 +275,11 @@ Parameters: dict mapping strs to values ; 2D list of ints ; int ; int ; str
 Returns: None
 '''
 def updateBoard(data, board, row, col, player):
-    if board[row,col]==SHIP_UNCLICKED:
-        board[row,col]=SHIP_CLICKED
+    if board[row][col]==SHIP_UNCLICKED:
+        board[row][col]=SHIP_CLICKED
     else:
-        board[row,col]=EMPTY_UNCLICKED
-        board[row,col]=EMPTY_CLICKED
+        board[row][col]==EMPTY_UNCLICKED
+        board[row][col]=EMPTY_CLICKED
 
     return
 
@@ -286,11 +291,18 @@ Returns: None
 '''
 def runGameTurn(data, row, col):
     z=data["computerboard"]
-    if z[row,col]==SHIP_CLICKED or z[row,col]==EMPTY_CLICKED:
+    if z[row][col]==SHIP_CLICKED or z[row][col]==EMPTY_CLICKED:
         return
     else:
         updateBoard(data, z, row, col, "user")
-    return
+    [r,c]=getComputerGuess(data["userboard"])
+    updateBoard(data,data["userboard"], r, c,"comp")
+    data["currentturns"]=data["currentturns"]+1
+    if (data["currentturns"]==data["maxturns"]):
+        data["winner"]="draw"
+
+        
+    
 
 
 '''
@@ -328,6 +340,18 @@ Parameters: dict mapping strs to values ; Tkinter canvas
 Returns: None
 '''
 def drawGameOver(data, canvas):
+    if (data["winner"]=="user"):
+        canvas.create_text(250,150, text="CONGRACTULATIONS", fill="gold",font=("Arial","24","bold italic"))
+        canvas.create_text(250,250, text="PRESS ENTER IF U WANT TO PLAY AGAIN", fill="black",font=("Arial","16","bold italic"))
+    if (data["winner"]=="comp"):
+        canvas.create_text(250,150, text="YOU LOSE", fill="brown",font=("Arial","24","bold italic"))
+        canvas.create_text(250,250, text="PRESS ENTER IF U WANT TO PLAY AGAIN", fill="black",font=("Arial","16","bold italic"))
+    if (data["winner"]=="draw"):
+        canvas.create_text(250,150, text="OUT OF MOVES", fill="silver",font=("Arial","24","bold italic"))
+        canvas.create_text(250,250, text="PRESS ENTER IF U WANT TO PLAY AGAIN", fill="black",font=("Arial","16", "bold italic"))
+
+        canvas.pack()
+
     return
 
 
@@ -386,7 +410,7 @@ def runSimulation(w, h):
 
 # This code runs the test cases to check your work
 if __name__ == "__main__":
-    test.testIsGameOver()
+    
     
     
     ## Finally, run the simulation to test it manually ##
